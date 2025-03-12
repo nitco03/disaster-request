@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -54,7 +53,7 @@ export const RequestForm: React.FC = () => {
       const isUrgent = await classifyRequest(values.description);
       console.log("Request classification result:", isUrgent);
 
-      // Add the request to Firestore
+      // Add the request to Firestore with only the required fields
       await addRequest({
         userId: currentUser.uid,
         userEmail: currentUser.email || "unknown@email.com",

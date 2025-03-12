@@ -78,7 +78,6 @@ export interface Request {
   id?: string;
   userId: string;
   userEmail: string;
-  userName?: string;
   description: string;
   location: string;
   phoneNumber: string;
@@ -88,20 +87,8 @@ export interface Request {
 
 // Firestore functions
 export const addRequest = async (requestData: Omit<Request, 'id' | 'createdAt'>): Promise<string> => {
-  // Get user profile to include name
-  let userName = undefined;
-  try {
-    const userProfile = await getUserProfile(requestData.userId);
-    if (userProfile && userProfile.displayName) {
-      userName = userProfile.displayName;
-    }
-  } catch (error) {
-    console.error("Error fetching user profile for request:", error);
-  }
-
   const docRef = await addDoc(collection(db, "requests"), {
     ...requestData,
-    userName,
     createdAt: Timestamp.now()
   });
   return docRef.id;
