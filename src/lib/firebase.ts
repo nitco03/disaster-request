@@ -1,8 +1,7 @@
-
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, UserCredential, User } from "firebase/auth";
-import { getFirestore, collection, addDoc, getDocs, query, orderBy, where, Timestamp, DocumentData, QuerySnapshot, doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs, query, orderBy, where, Timestamp, DocumentData, QuerySnapshot, doc, setDoc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -122,6 +121,11 @@ export const getUserRequests = async (userId: string): Promise<Request[]> => {
   );
   const querySnapshot = await getDocs(q);
   return transformQuerySnapshot(querySnapshot);
+};
+
+export const deleteRequest = async (requestId: string): Promise<void> => {
+  const requestRef = doc(db, "requests", requestId);
+  await deleteDoc(requestRef);
 };
 
 const transformQuerySnapshot = (querySnapshot: QuerySnapshot<DocumentData>): Request[] => {

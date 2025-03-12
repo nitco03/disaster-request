@@ -14,18 +14,21 @@ export const classifyRequest = async (description: string): Promise<boolean> => 
       Classify this as either "URGENT" or "NOT_URGENT" based on these criteria:
       
       URGENT:
-      - Immediate danger to life or safety
-      - Critical medical needs
-      - Lack of essential supplies (water, food, shelter in immediate timeframe)
-      - Trapped individuals or immediate rescue needs
-      - Severe structural damage with people at risk
+      - Trapped persons or people unable to move
+      - Drowning or water-related emergencies
+      - Collapsed buildings or structural damage with people inside
+      - First aid or medical emergencies
+      - "Help us" or similar critical distress calls
+      - Situations where people are unable to move/evacuate
+      - Immediate danger to life or safety of any kind
       
       NOT_URGENT:
+      - Food or water requests without immediate life threat
+      - Utility outages (power, water) without medical dependencies
       - Information requests
-      - Supply needs that are not immediate
-      - Infrastructure damage reports without immediate danger
-      - Non-emergency community support
       - Long-term recovery needs
+      - Supply needs that are not immediate life-saving
+      - Non-emergency community support
       
       Respond with ONLY "URGENT" or "NOT_URGENT".
     `;

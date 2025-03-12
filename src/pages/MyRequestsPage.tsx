@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Header } from "@/components/Header";
 import { RequestCard } from "@/components/RequestCard";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { getUserRequests, Request } from "@/lib/firebase";
 import { PlusCircle } from "lucide-react";
 
@@ -15,27 +15,32 @@ const MyRequestsPage: React.FC = () => {
   const { currentUser } = useAuth();
   const { toast } = useToast();
 
-  useEffect(() => {
-    const fetchUserRequests = async () => {
-      if (!currentUser) return;
-      
-      try {
-        const userRequests = await getUserRequests(currentUser.uid);
-        setRequests(userRequests);
-      } catch (error) {
-        console.error("Error fetching user requests:", error);
-        toast({
-          title: "Error",
-          description: "Failed to load your requests. Please try again.",
-          variant: "destructive",
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchUserRequests = async () => {
+    if (!currentUser) return;
+    
+    try {
+      setLoading(true);
+      const userRequests = await getUserRequests(currentUser.uid);
+      setRequests(userRequests);
+    } catch (error) {
+      console.error("Error fetching user requests:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load your requests. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchUserRequests();
   }, [currentUser, toast]);
+
+  const handleRequestDelete = () => {
+    fetchUserRequests();
+  };
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -82,7 +87,12 @@ const MyRequestsPage: React.FC = () => {
         ) : requests.length > 0 ? (
           <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
             {requests.map((request) => (
-              <RequestCard key={request.id} request={request} />
+              <RequestCard 
+                key={request.id} 
+                request={request} 
+                showDeleteButton={true}
+                onDelete={handleRequestDelete}
+              />
             ))}
           </div>
         ) : (

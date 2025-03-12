@@ -1,17 +1,41 @@
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Phone, Clock, User } from "lucide-react";
-import { Request } from "@/lib/firebase";
+import { Button } from "@/components/ui/button";
+import { MapPin, Phone, Clock, User, Trash2, AlertTriangle } from "lucide-react";
+import { Request, deleteRequest, getCurrentUser } from "@/lib/firebase";
 import { formatDistanceToNow } from "date-fns";
+import { toast } from "@/hooks/use-toast";
 
 interface RequestCardProps {
   request: Request;
+  onDelete?: () => void;
+  showDeleteButton?: boolean;
 }
 
-export const RequestCard: React.FC<RequestCardProps> = ({ request }) => {
+export const RequestCard: React.FC<RequestCardProps> = ({ request, onDelete, showDeleteButton = false }) => {
   // Display name if available, otherwise fallback to email username
   const displayName = request.userName || request.userEmail.split('@')[0];
+  
+  const handleDelete = async () => {
+    try {
+      if (request.id) {
+        await deleteRequest(request.id);
+        toast({
+          title: "Request deleted",
+          description: "Your request has been successfully deleted.",
+        });
+        if (onDelete) onDelete();
+      }
+    } catch (error) {
+      console.error("Error deleting request:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete request. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
   
   return (
     <Card className={`w-full ${request.isUrgent ? 'border-urgent border-2 animate-scale-in' : 'animate-fade-in'}`}>
@@ -23,7 +47,7 @@ export const RequestCard: React.FC<RequestCardProps> = ({ request }) => {
           </CardTitle>
           {request.isUrgent && (
             <Badge variant="destructive" className="bg-urgent hover:bg-urgent/90">
-              Urgent
+              <AlertTriangle className="h-3 w-3 mr-1" /> Urgent
             </Badge>
           )}
         </div>
@@ -45,6 +69,13 @@ export const RequestCard: React.FC<RequestCardProps> = ({ request }) => {
           </div>
         </div>
       </CardContent>
+      {showDeleteButton && (
+        <CardFooter className="pt-0 justify-end">
+          <Button variant="outline" size="sm" onClick={handleDelete} className="text-destructive hover:text-destructive hover:bg-destructive/10">
+            <Trash2 className="h-4 w-4 mr-1" /> Delete
+          </Button>
+        </CardFooter>
+      )}
     </Card>
   );
 };
