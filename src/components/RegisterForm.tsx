@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
-import { registerUser } from "@/lib/firebase";
+import { registerUser, createUserProfile } from "@/lib/firebase";
 import { Loader2 } from "lucide-react";
 
 const formSchema = z
@@ -40,12 +40,20 @@ export const RegisterForm: React.FC = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     try {
-      await registerUser(values.email, values.password);
+      // Register the user
+      const userCredential = await registerUser(values.email, values.password);
+      
+      // Create initial user profile
+      await createUserProfile(userCredential.user.uid, {
+        email: values.email,
+        displayName: values.email.split('@')[0], // Default name is the username part of email
+      });
+
       toast({
         title: "Account Created",
-        description: "You have successfully registered!",
+        description: "You have successfully registered! Please update your profile in the settings.",
       });
-      navigate("/dashboard");
+      navigate("/settings"); // Redirect to settings to complete profile
     } catch (error: any) {
       console.error("Registration error:", error);
       toast({

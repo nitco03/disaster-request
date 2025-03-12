@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, UserCredential, User } from "firebase/auth";
-import { getFirestore, collection, addDoc, getDocs, query, orderBy, where, Timestamp, DocumentData, QuerySnapshot } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs, query, orderBy, where, Timestamp, DocumentData, QuerySnapshot, doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -38,11 +38,48 @@ export const getCurrentUser = (): User | null => {
   return auth.currentUser;
 };
 
+// User profile interface and functions
+export interface UserProfile {
+  uid?: string;
+  displayName?: string;
+  age?: number;
+  gender?: 'male' | 'female' | 'other' | 'prefer not to say';
+  email?: string;
+}
+
+export const createUserProfile = async (userId: string, profileData: UserProfile): Promise<void> => {
+  const userRef = doc(db, "userProfiles", userId);
+  await setDoc(userRef, {
+    ...profileData,
+    createdAt: Timestamp.now()
+  });
+};
+
+export const getUserProfile = async (userId: string): Promise<UserProfile | null> => {
+  const userRef = doc(db, "userProfiles", userId);
+  const docSnap = await getDoc(userRef);
+  
+  if (docSnap.exists()) {
+    return { uid: docSnap.id, ...docSnap.data() } as UserProfile;
+  } else {
+    return null;
+  }
+};
+
+export const updateUserProfile = async (userId: string, profileData: Partial<UserProfile>): Promise<void> => {
+  const userRef = doc(db, "userProfiles", userId);
+  await updateDoc(userRef, {
+    ...profileData,
+    updatedAt: Timestamp.now()
+  });
+};
+
 // Request types
 export interface Request {
   id?: string;
   userId: string;
   userEmail: string;
+  userName?: string;
   description: string;
   location: string;
   phoneNumber: string;
@@ -52,8 +89,20 @@ export interface Request {
 
 // Firestore functions
 export const addRequest = async (requestData: Omit<Request, 'id' | 'createdAt'>): Promise<string> => {
+  // Get user profile to include name
+  let userName = undefined;
+  try {
+    const userProfile = await getUserProfile(requestData.userId);
+    if (userProfile && userProfile.displayName) {
+      userName = userProfile.displayName;
+    }
+  } catch (error) {
+    console.error("Error fetching user profile for request:", error);
+  }
+
   const docRef = await addDoc(collection(db, "requests"), {
     ...requestData,
+    userName,
     createdAt: Timestamp.now()
   });
   return docRef.id;

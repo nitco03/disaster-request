@@ -14,6 +14,7 @@ import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
 import NewRequestPage from "./pages/NewRequestPage";
 import MyRequestsPage from "./pages/MyRequestsPage";
+import SettingsPage from "./pages/SettingsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -67,6 +68,14 @@ const App = () => (
               element={
                 <RouteGuard>
                   <MyRequestsPage />
+                </RouteGuard>
+              } 
+            />
+            <Route 
+              path="/settings" 
+              element={
+                <RouteGuard>
+                  <SettingsPage />
                 </RouteGuard>
               } 
             />
