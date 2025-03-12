@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { addRequest, getCurrentUser } from "@/lib/firebase";
 import { classifyRequest } from "@/lib/gemini";
@@ -48,8 +48,11 @@ export const RequestForm: React.FC = () => {
         throw new Error("User not authenticated");
       }
 
+      console.log("Submitting request with description:", values.description);
+      
       // Classify the request using Gemini AI
       const isUrgent = await classifyRequest(values.description);
+      console.log("Request classification result:", isUrgent);
 
       // Add the request to Firestore
       await addRequest({

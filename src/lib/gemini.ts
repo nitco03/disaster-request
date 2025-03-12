@@ -3,7 +3,8 @@
 export const classifyRequest = async (description: string): Promise<boolean> => {
   try {
     const apiKey = "AIzaSyDp68C7YOwx9ld0TFUdC7YLRWcFfCw5Ilc"; // Gemini API key
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
+    // Updated to use the v1 API endpoint instead of v1beta
+    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${apiKey}`;
     
     const promptText = `
       You are an emergency request classifier for a disaster relief app. 
@@ -57,12 +58,31 @@ export const classifyRequest = async (description: string): Promise<boolean> => 
       const classification = data.candidates[0].content.parts[0].text.trim();
       console.log("Gemini classification:", classification);
       return classification.includes("URGENT");
+    } else if (data.error) {
+      // Enhanced error handling
+      console.error("Gemini API error:", data.error);
+      // Fall back to basic keyword analysis if the API fails
+      return fallbackClassification(description);
     } else {
       console.error("Unexpected response format:", data);
-      return false; // Default to non-urgent if there's an issue
+      return fallbackClassification(description);
     }
   } catch (error) {
     console.error("Error classifying request:", error);
-    return false; // Default to non-urgent if there's an error
+    // Use fallback classification mechanism
+    return fallbackClassification(description);
   }
+};
+
+// Simple fallback classification based on keywords if the API fails
+const fallbackClassification = (description: string): boolean => {
+  const urgentKeywords = [
+    'trap', 'stuck', 'hurt', 'injury', 'emergency', 'medical', 
+    'bleeding', 'flood', 'collapsed', 'drowning', 'fire', 'help', 
+    'urgent', 'dying', 'death', 'severe', 'critical', 'immediate',
+    'rescue', 'danger', 'unsafe', 'life', 'threatening'
+  ];
+  
+  const descriptionLower = description.toLowerCase();
+  return urgentKeywords.some(keyword => descriptionLower.includes(keyword));
 };
