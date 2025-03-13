@@ -3,9 +3,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MapPin, Phone, Clock, User, Trash2, AlertTriangle } from "lucide-react";
-import { Request, deleteRequest, getCurrentUser } from "@/lib/firebase";
+import { Request, deleteRequest } from "@/lib/firebase";
 import { formatDistanceToNow } from "date-fns";
-import { toast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 interface RequestCardProps {
   request: Request;
@@ -14,14 +14,14 @@ interface RequestCardProps {
 }
 
 export const RequestCard: React.FC<RequestCardProps> = ({ request, onDelete, showDeleteButton = false }) => {
-  // Display name if available, otherwise fallback to email username
-  const displayName = request.userName || request.userEmail.split('@')[0];
+  // Display email username since userName is no longer available
+  const displayName = request.userEmail.split('@')[0];
   
   const handleDelete = async () => {
     try {
       if (request.id) {
         await deleteRequest(request.id);
-        toast({
+        useToast().toast({
           title: "Request deleted",
           description: "Your request has been successfully deleted.",
         });
@@ -29,7 +29,7 @@ export const RequestCard: React.FC<RequestCardProps> = ({ request, onDelete, sho
       }
     } catch (error) {
       console.error("Error deleting request:", error);
-      toast({
+      useToast().toast({
         title: "Error",
         description: "Failed to delete request. Please try again.",
         variant: "destructive",
