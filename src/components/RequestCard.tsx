@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { MapPin, Phone, Clock, User, Trash2, AlertTriangle } from "lucide-react";
 import { Request, deleteRequest } from "@/lib/firebase";
 import { formatDistanceToNow } from "date-fns";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 
 interface RequestCardProps {
   request: Request;
@@ -21,7 +21,7 @@ export const RequestCard: React.FC<RequestCardProps> = ({ request, onDelete, sho
     try {
       if (request.id) {
         await deleteRequest(request.id);
-        useToast().toast({
+        toast({
           title: "Request deleted",
           description: "Your request has been successfully deleted.",
         });
@@ -29,7 +29,7 @@ export const RequestCard: React.FC<RequestCardProps> = ({ request, onDelete, sho
       }
     } catch (error) {
       console.error("Error deleting request:", error);
-      useToast().toast({
+      toast({
         title: "Error",
         description: "Failed to delete request. Please try again.",
         variant: "destructive",
