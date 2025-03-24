@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -47,11 +48,11 @@ export const RequestForm: React.FC = () => {
         throw new Error("User not authenticated");
       }
 
-      console.log("Submitting request with description:", values.description);
+      console.log("Submitting aid request with description:", values.description);
       
       // Classify the request using Gemini AI
       const isUrgent = await classifyRequest(values.description);
-      console.log("Request classification result:", isUrgent);
+      console.log("Aid request classification result:", isUrgent);
 
       // Add the request to Firestore with only the required fields
       await addRequest({
@@ -64,7 +65,7 @@ export const RequestForm: React.FC = () => {
       });
 
       toast({
-        title: "Request Submitted",
+        title: "Aid Request Submitted",
         description: isUrgent 
           ? "Your request has been classified as urgent and submitted successfully."
           : "Your request has been submitted successfully.",
@@ -73,10 +74,10 @@ export const RequestForm: React.FC = () => {
       form.reset();
       navigate("/dashboard");
     } catch (error: any) {
-      console.error("Error submitting request:", error);
+      console.error("Error submitting aid request:", error);
       toast({
         title: "Submission Failed",
-        description: error.message || "There was an error submitting your request.",
+        description: error.message || "There was an error submitting your aid request.",
         variant: "destructive",
       });
     } finally {
@@ -87,8 +88,8 @@ export const RequestForm: React.FC = () => {
   return (
     <Card className="w-full max-w-lg mx-auto glass">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl">Submit a Request</CardTitle>
-        <CardDescription>Enter the details of your request</CardDescription>
+        <CardTitle className="text-2xl">Submit a Disaster Aid Request</CardTitle>
+        <CardDescription>Describe your emergency situation and location</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -98,10 +99,10 @@ export const RequestForm: React.FC = () => {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>Emergency Description</FormLabel>
                   <FormControl>
                     <Textarea 
-                      placeholder="Describe your situation in detail..." 
+                      placeholder="Describe your emergency situation in detail..." 
                       className="min-h-[120px]" 
                       {...field} 
                     />
@@ -128,7 +129,7 @@ export const RequestForm: React.FC = () => {
               name="phoneNumber"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Phone Number</FormLabel>
+                  <FormLabel>Emergency Contact Number</FormLabel>
                   <FormControl>
                     <Input placeholder="+1 (555) 123-4567" {...field} />
                   </FormControl>
@@ -142,7 +143,7 @@ export const RequestForm: React.FC = () => {
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Processing...
                 </>
               ) : (
-                "Submit Request"
+                "Submit Emergency Request"
               )}
             </Button>
           </form>

@@ -24,7 +24,7 @@ const DashboardPage: React.FC = () => {
       console.error("Error fetching requests:", error);
       toast({
         title: "Error",
-        description: "Failed to load requests. Please try again.",
+        description: "Failed to load aid requests. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -48,9 +48,9 @@ const DashboardPage: React.FC = () => {
       <main className="flex-1 container py-6 max-w-4xl animate-fade-in">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">Request Feed</h1>
+            <h1 className="text-2xl font-bold tracking-tight">Emergency Response Feed</h1>
             <p className="text-muted-foreground">
-              View and respond to community requests
+              View and respond to disaster aid requests
             </p>
           </div>
           <div className="flex space-x-2">
@@ -65,7 +65,7 @@ const DashboardPage: React.FC = () => {
             <Button asChild>
               <Link to="/new-request">
                 <PlusCircle className="h-4 w-4 mr-2" />
-                New Request
+                New Aid Request
               </Link>
             </Button>
           </div>
@@ -102,14 +102,14 @@ const DashboardPage: React.FC = () => {
           </div>
         ) : (
           <div className="text-center p-12 rounded-lg border border-dashed">
-            <h3 className="font-medium text-lg">No requests yet</h3>
+            <h3 className="font-medium text-lg">No aid requests yet</h3>
             <p className="text-muted-foreground mb-4">
-              Be the first to create a request for assistance
+              Be the first to create an aid request during disaster
             </p>
             <Button asChild>
               <Link to="/new-request">
                 <PlusCircle className="h-4 w-4 mr-2" />
-                Create Request
+                Create Aid Request
               </Link>
             </Button>
           </div>

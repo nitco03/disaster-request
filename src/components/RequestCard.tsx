@@ -22,8 +22,8 @@ export const RequestCard: React.FC<RequestCardProps> = ({ request, onDelete, sho
       if (request.id) {
         await deleteRequest(request.id);
         toast({
-          title: "Request deleted",
-          description: "Your request has been successfully deleted.",
+          title: "Aid request deleted",
+          description: "Your aid request has been successfully deleted.",
         });
         if (onDelete) onDelete();
       }
@@ -31,7 +31,7 @@ export const RequestCard: React.FC<RequestCardProps> = ({ request, onDelete, sho
       console.error("Error deleting request:", error);
       toast({
         title: "Error",
-        description: "Failed to delete request. Please try again.",
+        description: "Failed to delete aid request. Please try again.",
         variant: "destructive",
       });
     }

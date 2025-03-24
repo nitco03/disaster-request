@@ -26,7 +26,7 @@ const MyRequestsPage: React.FC = () => {
       console.error("Error fetching user requests:", error);
       toast({
         title: "Error",
-        description: "Failed to load your requests. Please try again.",
+        description: "Failed to load your aid requests. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -48,15 +48,15 @@ const MyRequestsPage: React.FC = () => {
       <main className="flex-1 container py-6 max-w-4xl animate-fade-in">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">My Requests</h1>
+            <h1 className="text-2xl font-bold tracking-tight">My Aid Requests</h1>
             <p className="text-muted-foreground">
-              View all requests you've submitted
+              Manage your submitted disaster aid requests
             </p>
           </div>
           <Button asChild>
             <Link to="/new-request">
               <PlusCircle className="h-4 w-4 mr-2" />
-              New Request
+              New Aid Request
             </Link>
           </Button>
         </div>
@@ -97,14 +97,14 @@ const MyRequestsPage: React.FC = () => {
           </div>
         ) : (
           <div className="text-center p-12 rounded-lg border border-dashed">
-            <h3 className="font-medium text-lg">No requests yet</h3>
+            <h3 className="font-medium text-lg">No aid requests yet</h3>
             <p className="text-muted-foreground mb-4">
-              You haven't created any requests yet
+              You haven't created any disaster aid requests yet
             </p>
             <Button asChild>
               <Link to="/new-request">
                 <PlusCircle className="h-4 w-4 mr-2" />
-                Create Request
+                Create Aid Request
               </Link>
             </Button>
           </div>
