@@ -49,7 +49,7 @@ export const Header = () => {
       <div className="container flex h-16 items-center justify-between py-4">
         <Link to="/dashboard" className="flex items-center gap-2">
           <AlertCircle className="h-6 w-6 text-primary" />
-          <span className="text-xl font-bold">Emergency Response</span>
+          <span className="text-xl font-bold">Disaster Aid</span>
         </Link>
 
         {/* Desktop navigation */}

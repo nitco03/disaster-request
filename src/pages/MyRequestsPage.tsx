@@ -48,7 +48,7 @@ const MyRequestsPage: React.FC = () => {
       <main className="flex-1 container py-6 max-w-4xl animate-fade-in">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">My Aid Requests</h1>
+            <h1 className="text-2xl font-bold tracking-tight">My Disaster Aid Requests</h1>
             <p className="text-muted-foreground">
               Manage your submitted disaster aid requests
             </p>

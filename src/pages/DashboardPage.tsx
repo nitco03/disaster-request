@@ -48,7 +48,7 @@ const DashboardPage: React.FC = () => {
       <main className="flex-1 container py-6 max-w-4xl animate-fade-in">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">Emergency Response Feed</h1>
+            <h1 className="text-2xl font-bold tracking-tight">Disaster Aid Feed</h1>
             <p className="text-muted-foreground">
               View and respond to disaster aid requests
             </p>
